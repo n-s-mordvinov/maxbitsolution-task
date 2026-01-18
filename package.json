@@ -1,0 +1,14 @@
+{
+  "name": "maxbitsolution-task",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd frontend_technical_task && npm start",
+    "install:all": "npm install && cd frontend && npm install && cd ../frontend_technical_task && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
