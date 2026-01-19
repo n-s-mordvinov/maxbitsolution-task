@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@pinia/nuxt',
     '@vee-validate/nuxt',
+    '@nuxt/fonts'
   ],
   shadcn: {
     /**
@@ -41,6 +42,9 @@ export default defineNuxtConfig({
      * @default `['stores']`
      */
       storesDirs: []
+  },
+  icon: {
+    localApiEndpoint: '/_nuxt_icon'
   },
   nitro: {
     routeRules: {

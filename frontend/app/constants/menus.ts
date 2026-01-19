@@ -5,32 +5,32 @@ export type RoutesKey = 'movies' | 'cinemas' | 'my-tickets' | 'login' | 'logout'
 export const routes: Record<RoutesKey, NavLink> = {
   movies: {
     title: 'Фильмы',
-    icon: 'i-lucide-home',
+    icon: 'i-lucide-film',
     link: '/',
   },
   cinemas: {
     title: 'Кинотеатры',
-    icon: 'i-lucide-mail',
+    icon: 'i-lucide-tv-minimal',
     link: '/cinemas',
   },
   'my-tickets': {
     title: 'Мои билеты',
-    icon: 'i-lucide-mail',
+    icon: 'i-lucide-ticket',
     link: '/my-tickets',
   },
   login: {
     title: 'Вход',
-    icon: 'i-lucide-mail',
+    icon: 'i-lucide-log-in',
     link: '/login',
   },
   logout: {
     title: 'Выход',
-    icon: 'i-lucide-mail',
+    icon: 'i-lucide-log-out',
     link: '/logout',
   },
   signup: {
     title: 'Регистрация',
-    icon: 'i-lucide-mail',
+    icon: 'i-lucide-user-plus',
     link: '/signup',
   }
 }

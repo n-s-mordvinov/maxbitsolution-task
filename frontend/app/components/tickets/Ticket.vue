@@ -27,19 +27,18 @@ const currentMovieTitle = computed(() => {
   return movies.value.find((item) => item.id === movieSession.value?.movieId)?.title || '-';
 })
 
-
 let timerId: number | null = null;
 
 const formattedDateTime = computed(() => {
-  if (props.ticket.bookedAt) {
+  if (movieSession.value?.startTime) {
     return new Intl.DateTimeFormat('ru-RU', {
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
       hour12: false
-    }).format(new Date(props.ticket.bookedAt))
-    .replace(',', '') // удаляем запятую
+    }).format(new Date(movieSession.value.startTime))
+    .replace(',', '')
     .replace(/(\d{2})\.(\d{2}) (\d{2}):(\d{2})/, '$1.$2 $3:$4');
   }
   return '-'
