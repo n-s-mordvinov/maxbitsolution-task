@@ -1,3 +1,4 @@
+import { toast } from 'vue-sonner';
 import { routes } from '~/constants/menus'
 import type { Auth } from '~/types/auth'
 
@@ -5,28 +6,42 @@ export const useAuth = () => {
   const token = useCookie<string>('auth_token')
 
   const onLogin = async (data: Auth) => {
-    try {
-      const response = await $fetch<{ token: string }>('/api/login', {
-        method: 'POST',
-        body: data
-      })
-      
-      token.value = response.token
-      return { success: true }
-    } catch (error) {
-      return { success: false, error: 'Ошибка авторизации' }
-    }
+    const response = await $fetch<{ token: string }>('/api/login', {
+      method: 'POST',
+      body: data,
+      onResponseError: ({ response }) => {
+        switch(response.status) {
+          case 400:
+            toast.error('Требуется имя пользователя и пароль')
+            break;
+          case 401:
+            toast.error('Неверное имя пользователя или пароль')
+            break;
+          default:
+            toast.error('Ошибка авторизации')
+            break;
+        }
+      }
+    })
+
+    token.value = response.token;
+    navigateTo(routes.movies.link)
+  }
+
+  const resetToken = () => {
+    token.value = ''
   }
 
   const onLogout = async () => {
-    token.value = ''
     navigateTo(routes.login.link)
+    token.value = ''
   }
 
   return {
     token,
     onLogin,
     onLogout,
-    isAuthenticated: computed(() => token.value),
+    resetToken,
+    isAuthenticated: computed(() => !!token.value),
   }
 }

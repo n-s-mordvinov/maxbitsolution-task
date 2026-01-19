@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { routes } from "~/constants/menus"
 import { registerSchema } from '~/schemas/registerSchema';
+import { toast } from 'vue-sonner';
+import type { Register } from '~/types/auth';
 
 const token = useCookie<string>('auth_token')
 
@@ -33,23 +35,33 @@ const { value: username } = useField<string>('username')
 const { value: password } = useField<string>('password')
 const { value: confirmPassword } = useField<string>('confirmPassword')
 
-const onSubmit = handleSubmit(async (values) => {
-  try {
-    const response = await $fetch<{ token: string }>('/api/register', {
-      method: 'POST',
-      body: {
-        username: values.username,
-        password: values.password
+const onSubmit = handleSubmit((values) => {
+  $fetch<Register>('/api/register', {
+    method: 'POST',
+    body: {
+      username: values.username,
+      password: values.password
+    },
+    onResponseError: ({ response }) => {
+      switch(response.status) {
+        case 400:
+          toast.error('Требуется имя пользователя и пароль')
+          break;
+        case 409:
+          toast.error('Имя пользователя уже существует')
+          break;
+        default:
+          toast.error('Ошибка регистрации')
+          break;
       }
-    })
-    
-    token.value = response.token
-    navigateTo(routes.movies.link)
-    return { success: true }
-  } catch (error) {
-    return { success: false, error: 'Ошибка регистрации' }
-  }
-})
+    }
+  }).then((response) => {
+    if (response.token) {
+      token.value = response.token
+      navigateTo(routes.movies.link)
+    }
+  })
+});
 
 </script>
 

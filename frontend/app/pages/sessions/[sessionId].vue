@@ -3,6 +3,7 @@ import { Button } from '~/components/ui/button';
 import { routes } from '~/constants/menus';
 
 const route = useRoute();
+const auth = useAuth();
 
 const { movieSession } = useMovieSession(Number(route.params.sessionId))
 
@@ -51,6 +52,10 @@ const onSelect = (rowNumber: number, seatNumber: number) => {
 }
 
 const onBooking = () => {
+  if (!auth.isAuthenticated.value) {
+    navigateTo(routes.login.link)
+    return;
+  }
   if (movieSession.value) {
     $fetch<{ bookingId: string }>(`/api/movieSessions/${movieSession.value.id}/bookings`, {
       method: 'POST',
@@ -105,7 +110,7 @@ const onBooking = () => {
                     'hover:bg-blue-500': selectedSeats[`${row}_${column}`],
                     'bg-red-500': movieSession.bookedSeats.find((item) => item.rowNumber === row && item.seatNumber === column)
                   }"
-                  :disabled="movieSession.bookedSeats.find((item) => item.rowNumber === row && item.seatNumber === column)"
+                  :disabled="!auth.isAuthenticated.value || movieSession.bookedSeats.find((item) => item.rowNumber === row && item.seatNumber === column)"
                 ></Button>
               </TableCell>
             </TableRow>

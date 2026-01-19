@@ -13,7 +13,7 @@ definePageMeta({
 const { onLogout } = useAuth()
 
 const settingsStore = useSettingsStore();
-const { data: bookings } = await useFetch<Booking[]>('/api/me/bookings/', {
+const { data: bookings, refresh: refreshBookings } = await useFetch<Booking[]>('/api/me/bookings/', {
   onResponseError ({ response }) {
     if (response.status === 401) {
       onLogout()
@@ -21,7 +21,7 @@ const { data: bookings } = await useFetch<Booking[]>('/api/me/bookings/', {
   },
 })
 
-const { data: settings } = useAsyncData(
+const { data: settings,  } = useAsyncData(
   'settings',
   async () => {
     const res = await $fetch<Settings>('/api/settings/');
@@ -70,13 +70,13 @@ const bookingsGroup = computed<BookingsGroup>(() => {
       Мои билеты
     </h1>
     <template v-if="bookings && settings">
-      <Group title="Не оплаченные">
-        <Ticket v-for="(booking, bookingIndex) in bookingsGroup.unpaid" :key="bookingIndex" :ticket="booking" />
+      <Group title="Не оплаченные" v-if="bookingsGroup.unpaid.length">
+        <Ticket v-for="(booking, bookingIndex) in bookingsGroup.unpaid" :key="bookingIndex" :ticket="booking" :onRefresh="refreshBookings" />
       </Group>
-      <Group title="Будущие">
+      <Group title="Будущие" v-if="bookingsGroup.future.length">
         <Ticket v-for="(booking, bookingIndex) in bookingsGroup.future" :key="bookingIndex" :ticket="booking" />
       </Group>
-      <Group title="Прошедшие">
+      <Group title="Прошедшие" v-if="bookingsGroup.past.length">
         <Ticket v-for="(booking, bookingIndex) in bookingsGroup.past" :key="bookingIndex" :ticket="booking" />
       </Group>
     </template>

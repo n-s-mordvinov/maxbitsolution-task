@@ -13,7 +13,7 @@ const cinemaStore = useCinemaStore();
 
 <template>
   <Button
-    variant="secondary"
+    variant="outline"
     @click="cinemaStore.setCinemaDetail(props.row.original)"
   >
     Посмотреть сеансы

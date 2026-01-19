@@ -4,10 +4,8 @@ import { routes } from "~/constants/menus";
 export default defineNuxtRouteMiddleware((to) => {
   const auth = useAuth()
 
-  if (to.meta.requiresAuth) {
-    if (!auth.isAuthenticated.value) {
-      return navigateTo(routes.login.link)
-    }
+  if (to.meta.requiresAuth && !auth.isAuthenticated.value) {
+    return navigateTo(routes.login.link)
   }
 
   if (auth.isAuthenticated.value && (to.path === routes.login.link || to.path === routes.signup.link)) {

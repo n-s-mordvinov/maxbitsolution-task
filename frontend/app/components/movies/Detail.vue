@@ -1,17 +1,7 @@
 <script setup lang="ts">
 import SessionsGroup from '~/components/sessions/SessionsGroup.vue';
 import { useMovieStore } from '~/stores/movieStore';
-import type { Movie, MovieSessions } from '~/types/movies';
-
-const movie: Movie = {
-  "id": 3,
-  "title": "Тёмный рыцарь",
-  "year": 2008,
-  "rating": 9,
-  "posterImage": "/static/images/posters/dark_knight.jpg",
-  "lengthMinutes": 152,
-  "description": "Когда Джокер сеет хаос и разрушение в Готэме, Бэтмен сталкивается с величайшими испытаниями своих способностей и морали."
-};
+import type { MovieSessions } from '~/types/movies';
 
 interface CinemaSessionsGroup {
   title: string;

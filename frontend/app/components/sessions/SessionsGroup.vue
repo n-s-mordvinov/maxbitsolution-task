@@ -32,7 +32,7 @@ const { sessionsGroup } = defineProps<SessionsGroupProps>()
             <Button
               v-for="session in item.sessions"
               :key="session.id"
-              variant="secondary"
+              variant="outline"
               @click="navigateTo(`/sessions/${session.id}`)"
             >{{new Date(session.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}}</Button>
           </div>

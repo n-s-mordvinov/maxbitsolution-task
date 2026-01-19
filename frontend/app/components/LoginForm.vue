@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -24,21 +23,14 @@ const props = defineProps<{
 
 const login = ref('')
 const password = ref('')
-const error = ref<string>('')
 
 const { onLogin } = useAuth()
 
-const handleLogin = async () => {
-  const result = await onLogin({
+const handleLogin = () => {
+  onLogin({
     username: login.value,
     password: password.value
   })
-  
-  if (result.success) {
-    navigateTo('/')
-  } else {
-    error.value = result.error || ""
-  }
 }
 </script>
 

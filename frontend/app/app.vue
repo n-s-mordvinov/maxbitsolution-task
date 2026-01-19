@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ConfigProvider } from 'reka-ui'
+import { Toaster } from '@/components/ui/sonner'
+import 'vue-sonner/style.css'
 
 useHead({
   meta: [
@@ -38,6 +40,7 @@ useSeoMeta({
           <NuxtPage />
         </NuxtLayout>
       </div>
+      <Toaster />
     </ConfigProvider>
   </Body>
 </template>

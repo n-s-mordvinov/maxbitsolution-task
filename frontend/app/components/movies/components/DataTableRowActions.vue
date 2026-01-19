@@ -14,7 +14,7 @@ const movieStore = useMovieStore();
 
 <template>
   <Button
-    variant="secondary"
+    variant="outline"
     @click="movieStore.setMovieDetail(props.row.original)"
   >
     Посмотреть сеансы

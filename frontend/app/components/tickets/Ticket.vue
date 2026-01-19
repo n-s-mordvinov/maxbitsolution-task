@@ -6,6 +6,7 @@ import type { Booking } from '~/types/bookings';
 
 interface TicketProps {
   ticket: Booking;
+  onRefresh?: () => {}
 }
 
 const props = defineProps<TicketProps>();
@@ -66,7 +67,10 @@ onMounted(() => {
   
     timerId = setInterval(() => {
       secondsLeft.value = calcRemaining()
-      if (secondsLeft.value <= 0 && timerId) clearInterval(timerId)
+      if (secondsLeft.value <= 0 && timerId) {
+        props.onRefresh?.()
+        clearInterval(timerId)
+      }
     }, 1000)
   }
 })
@@ -77,21 +81,18 @@ onUnmounted(() => {
 
 const onPayment = async () => {
   if (props.ticket) {
-    try {
-      const response = await $fetch<{ token: string }>(`/api/bookings/${props.ticket.id}/payments`, {
-        method: 'POST',
-      })
-      return { success: true }
-    } catch (error) {
-      return { success: false, error: 'Ошибка авторизации' }
-    }
+    $fetch<{ token: string }>(`/api/bookings/${props.ticket.id}/payments`, {
+      method: 'POST',
+    }).then(() => {
+      props.onRefresh?.()
+    })
   }
 }
 
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-4">
+  <div class="grid grid-cols-4 gap-4 mt-4">
     <div>
       <p>{{ currentMovieTitle || '-' }}</p>
       <p>{{ currentCinemaTitle || '-' }}</p>
