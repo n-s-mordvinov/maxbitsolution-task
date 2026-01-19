@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { toast } from 'vue-sonner';
 import { Button } from '~/components/ui/button';
 import { routes } from '~/constants/menus';
 
@@ -61,6 +62,28 @@ const onBooking = () => {
       method: 'POST',
       body: {
         seats: Object.values(selectedSeats)
+      },
+      onResponseError: ({ response }) => {
+        switch(response.status) {
+          case 400:
+            toast.error('Неверное тело запроса')
+            break;
+          case 401:
+            toast.error('Неавторизованный доступ')
+            break;
+          case 403:
+            toast.error('Доступ запрещен')
+            break;
+          case 404:
+            toast.error('Киносеанс не найден')
+            break;
+          case 409:
+            toast.error('Места уже забронированы')
+            break;
+          default:
+            toast.error('Ошибка бронирования')
+            break;
+        }
       }
     }).then(() => {
       navigateTo(routes['my-tickets'].link)

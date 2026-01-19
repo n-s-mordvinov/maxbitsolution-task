@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { toast } from 'vue-sonner';
 import { useMovieStore } from '~/stores/movieStore';
 import { useSettingsStore } from '~/stores/settingsStore';
 import type { Booking } from '~/types/bookings';
@@ -83,6 +84,19 @@ const onPayment = async () => {
   if (props.ticket) {
     $fetch<{ token: string }>(`/api/bookings/${props.ticket.id}/payments`, {
       method: 'POST',
+      onResponseError: ({ response }) => {
+        switch(response.status) {
+          case 404:
+            toast.error('Бронирование не найдено')
+            break;
+          case 409:
+            toast.error('Бронирование уже оплачено')
+            break;
+          default:
+            toast.error('Внутренняя ошибка сервера')
+            break;
+        }
+      }
     }).then(() => {
       props.onRefresh?.()
     })
